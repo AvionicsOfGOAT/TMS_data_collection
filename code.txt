@@ -1,0 +1,24 @@
+#include "HX711.h"
+#define calibration_factor -20100.0
+#define DOUT 3
+#define CLK 2
+HX711 scale(DOUT,CLK);
+
+const int sensorPin = A0; 
+int cnt = 0;
+void setup() {
+  Serial.begin(115200);
+  scale.set_scale(calibration_factor);
+  scale.tare();
+}
+
+void loop() {
+  unsigned long currentTime = millis();
+  Serial.print("T,");
+  Serial.print(currentTime/1000.0);
+  Serial.print(",RD,");
+  Serial.print(scale.get_units(), 1);
+  Serial.print(",PD,");
+  int sensorValue = analogRead(sensorPin);
+  Serial.println(sensorValue);
+}
